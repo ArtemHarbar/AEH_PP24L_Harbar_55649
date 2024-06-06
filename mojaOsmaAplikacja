@@ -1,0 +1,57 @@
+class Konto:
+    def __init__(self, numer_konta, saldo, wlasciciel, email, telefon):
+        self.__numer_konta = numer_konta
+        self.__saldo = saldo
+        self.__wlasciciel = wlasciciel
+        self.__email = email
+        self.__telefon = telefon
+
+    def get_numer_konta(self):
+        return self.__numer_konta
+
+    def set_numer_konta(self, numer_konta):
+        self.__numer_konta = numer_konta
+
+    def get_saldo(self):
+        return self.__saldo
+
+    def set_saldo(self, saldo):
+        self.__saldo = saldo
+
+    def get_wlasciciel(self):
+        return self.__wlasciciel
+
+    def set_wlasciciel(self, wlasciciel):
+        self.__wlasciciel = wlasciciel
+
+    def get_email(self):
+        return self.__email
+
+    def set_email(self, email):
+        self.__email = email
+
+    def get_telefon(self):
+        return self.__telefon
+
+    def set_telefon(self, telefon):
+        self.__telefon = telefon
+
+    def zasil_konto(self, kwota):
+        self.__saldo += kwota
+        print(f'Wpłata {kwota} została wykonana. Nowe saldo: {self.__saldo}')
+
+    def wyplac(self, kwota):
+        if self.__saldo >= kwota:
+            self.__saldo -= kwota
+            print(f'Pobrano {kwota} z konta. Pozostałe saldo: {self.__saldo}')
+        else:
+            print('Brak środków. Masz {} na koncie.'.format(self.__saldo))
+
+
+# Przykładowe użycie
+konto = Konto('123456789', 1000.0, 'Jan Kowalski', 'jan.kowalski@example.com', '123-456-789')
+
+konto.wyplac(900.0)
+konto.zasil_konto(250.0)
+konto.wyplac(50.0)
+konto.wyplac(500.0)
