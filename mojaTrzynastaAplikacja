@@ -1,0 +1,72 @@
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.*;
+import java.util.*;
+
+public class mojaTrzynastaAplikacja {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Prośba o podanie ścieżki do pliku wejściowego
+        System.out.println("Podaj ścieżkę do pliku wejściowego:");
+        String inputFilePath = scanner.nextLine();
+
+        // Sprawdzanie istnienia pliku wejściowego
+        Path pathToInputFile = Paths.get(inputFilePath);
+        while (!Files.exists(pathToInputFile) || Files.isDirectory(pathToInputFile)) {
+            System.out.println("Plik nie istnieje lub jest katalogiem. Podaj inną ścieżkę:");
+            inputFilePath = scanner.nextLine();
+            pathToInputFile = Paths.get(inputFilePath);
+        }
+
+        // Prośba o podanie ścieżki do pliku wyjściowego
+        System.out.println("Podaj ścieżkę do pliku wyjściowego:");
+        String outputFilePath = scanner.nextLine();
+        Path pathToOutputFile = Paths.get(outputFilePath);
+
+        // Liczenie liczby słów i ich wystąpień w pliku wejściowym
+        Map<String, Integer> wordCountMap = new HashMap<>();
+        int totalWordCount = countWords(pathToInputFile, wordCountMap);
+
+        // Wyświetlanie liczby słów użytkownikowi
+        System.out.println("Liczba wszystkich słów w pliku wejściowym: " + totalWordCount);
+        System.out.println("Liczba wystąpień każdego słowa:");
+        wordCountMap.forEach((word, count) -> System.out.println(word + ": " + count));
+
+        // Zapisywanie wyników do pliku wyjściowego
+        saveToFile(pathToOutputFile, pathToInputFile.getFileName().toString(), totalWordCount, wordCountMap);
+    }
+
+    private static int countWords(Path filePath, Map<String, Integer> wordCountMap) {
+        int totalWordCount = 0;
+        try (BufferedReader reader = Files.newBufferedReader(filePath, Charset.defaultCharset())) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] words = line.split("\\s+");
+                totalWordCount += words.length;
+                for (String word : words) {
+                    word = word.toLowerCase().replaceAll("[^a-ząćęłńóśźż]", "");
+                    if (!word.isEmpty()) {
+                        wordCountMap.put(word, wordCountMap.getOrDefault(word, 0) + 1);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Wystąpił błąd podczas czytania pliku.");
+            e.printStackTrace();
+        }
+        return totalWordCount;
+    }
+
+    private static void saveToFile(Path filePath, String fileName, int totalWordCount, Map<String, Integer> wordCountMap) {
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(filePath, Charset.defaultCharset()))) {
+            writer.println("Nazwa pliku: " + fileName);
+            writer.println("Liczba wszystkich słów: " + totalWordCount);
+            writer.println("Liczba wystąpień każdego słowa:");
+            wordCountMap.forEach((word, count) -> writer.println(word + ": " + count));
+        } catch (IOException e) {
+            System.err.println("Wystąpił błąd podczas zapisywania do pliku wyjściowego.");
+            e.printStackTrace();
+        }
+    }
+}
