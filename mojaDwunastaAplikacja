@@ -1,0 +1,53 @@
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Wczytywanie ścieżki do pliku wejściowego
+        System.out.println("Podaj ścieżkę do pliku wejściowego:");
+        String inputFilePath = scanner.nextLine();
+
+        // Sprawdzanie istnienia pliku wejściowego
+        File inputFile = new File(inputFilePath);
+        while (!inputFile.exists() || inputFile.isDirectory()) {
+            System.out.println("Plik nie istnieje lub jest katalogiem. Podaj inną ścieżkę:");
+            inputFilePath = scanner.nextLine();
+            inputFile = new File(inputFilePath);
+        }
+
+        // Wczytywanie ścieżki do pliku wyjściowego
+        System.out.println("Podaj ścieżkę do pliku wyjściowego:");
+        String outputFilePath = scanner.nextLine();
+
+        // Liczenie liczby linii w pliku wejściowym
+        int linesCount = countLines(inputFile);
+
+        // Zapisywanie nazwy pliku i liczby linii do pliku wyjściowego
+        saveToFile(outputFilePath, inputFile.getName(), linesCount);
+
+        // Wyświetlanie liczby linii użytkownikowi
+        System.out.println("Liczba linii w pliku wejściowym: " + linesCount);
+    }
+
+    private static int countLines(File file) {
+        int linesCount = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            while (reader.readLine() != null) {
+                linesCount++;
+            }
+        } catch (IOException e) {
+            System.err.println("Wystąpił błąd podczas czytania pliku.");
+            e.printStackTrace();
+        }
+        return linesCount;
+    }
+
+    private static void saveToFile(String filePath, String fileName, int linesCount) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            writer.println("Nazwa pliku: " + fileName);
+            writer.println("Liczba linii: " + linesCount);
+        } catch (IOException e) {
+            System.err.println("Wystąpił błąd podczas zapisywania do pliku wyjściowego.");
+            e.printStackTrace();
+        }
+    }
+}
