@@ -1,0 +1,99 @@
+public class Magazyn {
+    private int numerMagazynu;
+    private int dostepnaPrzestrzen;
+    private String nazwaWlasciciela;
+    private String emailWlasciciela;
+    private String telefonWlasciciela;
+    private int zajetaPrzestrzen;
+
+    public Magazyn(int numerMagazynu, int dostepnaPrzestrzen, String nazwaWlasciciela, String emailWlasciciela, String telefonWlasciciela) {
+        this.numerMagazynu = numerMagazynu;
+        this.dostepnaPrzestrzen = dostepnaPrzestrzen;
+        this.nazwaWlasciciela = nazwaWlasciciela;
+        this.emailWlasciciela = emailWlasciciela;
+        this.telefonWlasciciela = telefonWlasciciela;
+        this.zajetaPrzestrzen = 0; // Na początku magazyn jest pusty
+    }
+
+    public int getNumerMagazynu() {
+        return numerMagazynu;
+    }
+
+    public void setNumerMagazynu(int numerMagazynu) {
+        this.numerMagazynu = numerMagazynu;
+    }
+
+    public int getDostepnaPrzestrzen() {
+        return dostepnaPrzestrzen;
+    }
+
+    public void setDostepnaPrzestrzen(int dostepnaPrzestrzen) {
+        this.dostepnaPrzestrzen = dostepnaPrzestrzen;
+    }
+
+    public String getNazwaWlasciciela() {
+        return nazwaWlasciciela;
+    }
+
+    public void setNazwaWlasciciela(String nazwaWlasciciela) {
+        this.nazwaWlasciciela = nazwaWlasciciela;
+    }
+
+    public String getEmailWlasciciela() {
+        return emailWlasciciela;
+    }
+
+    public void setEmailWlasciciela(String emailWlasciciela) {
+        this.emailWlasciciela = emailWlasciciela;
+    }
+
+    public String getTelefonWlasciciela() {
+        return telefonWlasciciela;
+    }
+
+    public void setTelefonWlasciciela(String telefonWlasciciela) {
+        this.telefonWlasciciela = telefonWlasciciela;
+    }
+
+    public void dodajTowar(int ilosc) {
+        if (ilosc + zajetaPrzestrzen > dostepnaPrzestrzen) {
+            System.out.println("Nie można dodać towaru. Brak wystarczającej przestrzeni.");
+        } else {
+            zajetaPrzestrzen += ilosc;
+            System.out.println("Dodano " + ilosc + " jednostek towaru. Zajęta przestrzeń: " + zajetaPrzestrzen);
+        }
+    }
+
+    public void usunTowar(int ilosc) {
+        if (ilosc > zajetaPrzestrzen) {
+            System.out.println("Nie można usunąć towaru. W magazynie znajduje się mniej towaru niż próbujesz usunąć.");
+        } else {
+            zajetaPrzestrzen -= ilosc;
+            System.out.println("Usunięto " + ilosc + " jednostek towaru. Zajęta przestrzeń: " + zajetaPrzestrzen);
+        }
+    }
+
+    public void sprawdzZajetosc() {
+        int wolnaPrzestrzen = dostepnaPrzestrzen - zajetaPrzestrzen;
+        System.out.println("Zajęta przestrzeń: " + zajetaPrzestrzen + ". Wolna przestrzeń: " + wolnaPrzestrzen);
+    }
+
+    public void aktualizujKontakt(String nowyEmail, String nowyTelefon) {
+        setEmailWlasciciela(nowyEmail);
+        setTelefonWlasciciela(nowyTelefon);
+        System.out.println("Zaktualizowano dane kontaktowe. Nowy email: " + emailWlasciciela + ", nowy telefon: " + telefonWlasciciela);
+    }
+
+    public static void main(String[] args) {
+        // Przykładowe użycie klasy
+        Magazyn magazyn = new Magazyn(1, 100, "Jan Kowalski", "jan.kowalski@example.com", "123456789");
+
+        magazyn.dodajTowar(50);
+        magazyn.sprawdzZajetosc();
+
+        magazyn.usunTowar(20);
+        magazyn.sprawdzZajetosc();
+
+        magazyn.aktualizujKontakt("nowy.email@example.com", "987654321");
+    }
+}
